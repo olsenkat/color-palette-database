@@ -4,17 +4,17 @@
 ---
 
 ## 📘 Overview
-The **Color Palette Database** is a creative data management project that allows users to create, store, and browse custom color palettes. Stretch goals for the project include: abili to export palettes (for printing), and extracting palettes from imported images  
+The **Color Palette Database** is a data management project that will allow users to create, store, and browse custom color palettes. Stretch goals for the project include: ability to export palettes (for printing), and extracting palettes/colors from imported images.
 Each palette can include multiple colors, tags, and descriptions, enabling artists, designers, and crafters to organize their inspiration in one searchable place.
 
 This project demonstrates **relational database modeling, SQL queries, and CRUD operations** using PostgreSQL and Flask (Python).  
 - CRUD operations involve Creating, Reading, Updating, and Deleting SQL data.
-- Flask will the basic web development
+- Flask will handle basic web development
 This was developed as a final project for BYU's **Database Modeling Concepts** course.
 
 ---
 
-## 💡 Features
+## 💡 Features to Implement
 - Simple login with username and email
 - Create, view, edit, and delete color palettes
 - Store individual colors with HEX (and possibly RGB, hue data)
