@@ -15,7 +15,7 @@ def setup_db():
     # Initialize the database
 
     # Choose which SQL file to use
-    sql_file = "reset.sql" if TEST else "db-init.sql"
+    sql_file = "sql/reset.sql" if TEST else "sql/db-init.sql"
 
     with open(sql_file, "r") as f:
         sql_commands = f.read()
@@ -31,7 +31,7 @@ def setup_db():
     # If in a test environment, insert the values
     if TEST:
         try:
-            with open("insert-test-values.sql", "r") as f:
+            with open("sql/insert-test-values.sql", "r") as f:
                 sql_commands = f.read()
             for statement in sql_commands.split(";"):
                 statement = statement.strip()
