@@ -1,13 +1,23 @@
 -- db-init.sql
 
-CREATE TABLE `user` IF NOT EXISTS (
+-- Drop in reverse dependency order
+DROP TABLE IF EXISTS palette_tag;
+DROP TABLE IF EXISTS palette_color;
+DROP TABLE IF EXISTS tag;
+DROP TABLE IF EXISTS color;
+DROP TABLE IF EXISTS palette;
+DROP TABLE IF EXISTS user;
+
+-- Now recreate tables (your schema goes here)
+
+CREATE TABLE `user`(
     `user_id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `username` VARCHAR(50) NOT NULL UNIQUE,
     `email` VARCHAR(100) NOT NULL UNIQUE,
     `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE `palette` IF NOT EXISTS (
+CREATE TABLE `palette`(
     `palette_id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `user_id` BIGINT UNSIGNED NOT NULL,
     `name` VARCHAR(50) NOT NULL,
@@ -16,7 +26,7 @@ CREATE TABLE `palette` IF NOT EXISTS (
     `updated_at` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (`user_id`) REFERENCES `user`(`user_id`) ON DELETE CASCADE
 );
-CREATE TABLE `color` IF NOT EXISTS (
+CREATE TABLE `color`(
     `color_id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `hex_value` CHAR(7) NOT NULL,
     `r` TINYINT UNSIGNED NOT NULL,
@@ -27,11 +37,11 @@ CREATE TABLE `color` IF NOT EXISTS (
     `saturation` SMALLINT NULL,
     `brightness` SMALLINT NULL
 );
-CREATE TABLE `tag` IF NOT EXISTS (
+CREATE TABLE `tag`(
     `tag_id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `name` VARCHAR(50) NOT NULL UNIQUE
 );
-CREATE TABLE `palette_color` IF NOT EXISTS (
+CREATE TABLE `palette_color`(
     `palette_id` BIGINT UNSIGNED NOT NULL,
     `color_id` BIGINT UNSIGNED NOT NULL,
     `order_index` SMALLINT NOT NULL,
@@ -39,7 +49,7 @@ CREATE TABLE `palette_color` IF NOT EXISTS (
     FOREIGN KEY (`palette_id`) REFERENCES `palette`(`palette_id`) ON DELETE CASCADE,
     FOREIGN KEY (`color_id`) REFERENCES `color`(`color_id`) ON DELETE CASCADE
 );
-CREATE TABLE `palette_tag` IF NOT EXISTS (
+CREATE TABLE `palette_tag`(
     `palette_id` BIGINT UNSIGNED NOT NULL,
     `tag_id` BIGINT UNSIGNED NOT NULL,
     PRIMARY KEY (palette_id, tag_id),
