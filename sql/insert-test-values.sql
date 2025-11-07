@@ -1,7 +1,7 @@
 USE palette;
 
 -- --- USERS ---
-INSERT INTO user (username, email)
+INSERT INTO user (username, password)
 VALUES
   ('artlover', 'artlover@example.com'),
   ('designer_dan', 'dan@example.com');

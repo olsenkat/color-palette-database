@@ -1,0 +1,99 @@
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center; /* horizontal center */
+    align-items: center; /* vertical center */
+    overflow-x: hidden; /* hide horizontal scrollbar */
+}
+
+h1 {
+    padding: 0px;
+    margin: 0px;
+}
+
+/* input {
+    padding: 5px;
+    margin: 5px;
+} */
+
+.list-container {
+    text-align: center; /* Centers the inline-block element (the ul) */
+}
+
+.list-container ul {
+    display: inline-block; /* Allows the ul to be centered by its parent's text-align */
+    text-align: left; /* Optional: Aligns list items back to the left within the centered ul */
+}
+
+
+.my-button {
+    color: white;
+    padding: 5px;
+    padding-left: 10px;
+    padding-right: 10px;
+    margin-top: 10px;
+    cursor:pointer;
+}
+
+button:enabled {
+    cursor: pointer;
+    background-color: #f4567b;
+    border-color: #b65269;
+}
+
+button:disabled {
+    background-color: #f3849e;
+    border-color: #b65269;
+    cursor: auto;
+}
+
+.login-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px; /* space between fields */
+}
+
+.form-group {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 5px;
+    width: 250px; /* keeps things aligned */
+}
+
+input {
+    padding: 6px;
+    font-size: 14px;
+}
+
+
+.main-content {
+    text-align: center;
+    background-color: white;
+    border: 2px solid black;
+    width: 80%;
+    max-width: 80%;
+    margin: 20px auto;
+    padding: 20px;
+    box-sizing: border-box;
+    border-radius: 15px; /* Rounded corners*/
+}
+
+.zebra-stripes {
+    background: repeating-linear-gradient(
+        to right,
+        black 0px, black 2px, #f8b9c7 2px, #f8b9c7 200px,
+        black 200px, black 202px, #ffd1dc 202px, #ffd1dc 400px,
+        black 400px, black 402px, #f46f8f 402px, #f46f8f 600px,
+        black 600px, black 602px, #ffd77a 602px, #ffd77a 800px,
+        black 800px, black 802px, #f9a67d 802px, #f9a67d 1000px,
+        black 1000px, black 1002px, #f7c7d1 1002px, #f7c7d1 1200px,
+        black 1200px, black 1202px, #ffb5c1 1202px, #ffb5c1 1400px,
+        black 1400px, black 1402px, #ffe6a6 1402px, #ffe6a6 1600px
+    );
+    min-height: 100vh; /* full viewport height */
+    width: 100%;
+}

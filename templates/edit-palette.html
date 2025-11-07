@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Edit Palette</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    </head>
+    <body class="zebra-stripes">
+        <div class="main-content">
+            <h1 style="text-align:center;">Palettes</h1>
+            <div class = "list-container">
+                <ul style="text-align:center;">
+                    {% for palette in palettes %}
+                    <li>{{palette.palette_name}} by {{palette.username}}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </body>
+</html>
