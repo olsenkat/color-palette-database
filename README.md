@@ -9,7 +9,7 @@ Each palette can include multiple colors, tags, and descriptions, enabling artis
 
 This project demonstrates **relational database modeling, SQL queries, and CRUD operations** using PostgreSQL and Flask (Python).  
 - CRUD operations involve Creating, Reading, Updating, and Deleting SQL data.
-- Flask will handle basic web development
+- Flask will handle basic backend website operations
   
 This was developed as a final project for BYU's **Database Modeling Concepts** course.
 
