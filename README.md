@@ -25,6 +25,7 @@ This was developed as a final project for BYU's **Database Modeling Concepts** c
 - Visual display of palettes using CSS color blocks
 - (Stretch goal) Create palette from imported picture
 - (Stretch goal) Download palette for printing
+- (Stretch goal) Look for colors that are similar - colors that have been with this color on a palette.
 - (Stretch goal) Implement this as a public web application using Render or PythonAnywhere.
 
 ---
