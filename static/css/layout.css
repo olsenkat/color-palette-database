@@ -1,0 +1,46 @@
+/* layout.css */
+
+/* Main content container */
+.main-content {
+    background-color: white;
+    border: 2px solid #111;
+    border-radius: 12px;
+    padding: 30px;
+    width: fit-content;
+    height: fit-content;
+    text-align: center;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+/* Page content */
+.page-content {
+    align-content: flex-center;
+    align-items: flex-center;
+    align-self: center;
+}
+
+.page-content h2, .page-content h4 {
+    margin: 5px 0;
+}
+
+.content-container {
+    display: flex;
+    align-items: stretch;
+}
+
+/* Zebra stripes background */
+.zebra-stripes {
+    background: repeating-linear-gradient(
+        to right,
+        black 0px, black 2px, #f8b9c7 2px, #f8b9c7 200px,
+        black 200px, black 202px, #ffd1dc 202px, #ffd1dc 400px,
+        black 400px, black 402px, #f46f8f 402px, #f46f8f 600px,
+        black 600px, black 602px, #ffd77a 602px, #ffd77a 800px,
+        black 800px, black 802px, #f9a67d 802px, #f9a67d 1000px,
+        black 1000px, black 1002px, #f7c7d1 1002px, #f7c7d1 1200px,
+        black 1200px, black 1202px, #ffb5c1 1202px, #ffb5c1 1400px,
+        black 1400px, black 1402px, #ffe6a6 1402px, #ffe6a6 1600px
+    );
+    min-height: 100vh;
+    width: 100%;
+}

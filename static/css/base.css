@@ -1,0 +1,49 @@
+/* base.css */
+
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center; /* horizontal center */
+    align-items: center; /* vertical center */
+    overflow-x: hidden; /* hide horizontal scrollbar */
+    font-family: Nunito, sans-serif;
+}
+
+h1 {
+    padding: 0;
+    margin: 0;
+}
+
+/* input fields */
+input {
+    padding: 6px;
+    font-size: 14px;
+}
+
+/* forms */
+.login-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 5px;
+    width: 250px; /* keeps things aligned */
+}
+
+/* list container */
+.list-container {
+    text-align: center; /* centers inline-block ul */
+}
+
+.list-container ul {
+    display: inline-block; /* allows ul to be centered */
+    text-align: left; /* aligns list items left within ul */
+}
