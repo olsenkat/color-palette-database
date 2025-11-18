@@ -44,3 +44,69 @@
     min-height: 100vh;
     width: 100%;
 }
+
+/* Mini palettes and pagination*/
+
+.palettes-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+.palette-title {
+    border: 2px solid #ccc;
+    border-radius: 8px;
+    /* padding-left: 10px; */
+    /* padding-right: 10px; */
+    width: 200px;
+    height: 30px;
+
+    display: flex;              /* enable flexbox */
+    justify-content: center;    /* center horizontally */
+    align-items: center;        /* center vertically */
+    text-align: center;         /* center multiline text */
+}
+
+.palette-box {
+    border-radius: 8px;
+    /* border: 2px solid #ccc; */
+    padding: 10px;
+    align-content: center;
+    width: 200px;
+}
+
+.palette-colors {
+    display: flex;
+    flex-grow: 1;
+    align-items: center;
+    align-content: center;
+    overflow-x: auto;
+    gap: 0px;
+    padding: 5px 0;
+}
+
+.color-box {
+    border: 1px solid #000;
+    border-right: none;      /* removes double border between boxes */
+    height: 60px;
+    flex: 1 1 auto;
+    background-color: var(--box-color);
+}
+
+/* Last color box in the row keeps its right border */
+.color-box:last-child {
+    border-right: 1px solid #000;
+}
+
+
+.pagination {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.pagination a {
+    margin: 0 10px;
+    text-decoration: none;
+    color: #f4567b;
+    font-weight: bold;
+}
+

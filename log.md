@@ -10,4 +10,5 @@
 | 11/13/2025 | Updated endpoint for login, created a main page, removed some duplication. Created base pages for other portions of website. | 1.5 |
 | 11/17/2025 | Working on switching between viewing all user palettes and just personal user palettes. | 1 |
 | 11/18/2025 | Removed lots of duplication, added base pages, can view user palettes or all palettes based on dropdown | 2.5 |
-| **Total** |  | **12** |
+| 11/18/2025 | Sidenav now shows what tab we are on. Created mini palettes for viewing palettes. Created pagination for viewing palettes. Made palette page look similar to what I want. Updated formatting for tags/colors temp page. | 2 |
+| **Total** |  | **14** |

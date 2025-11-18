@@ -1,21 +1,14 @@
-<!doctype html>
-<html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <title>Edit Palette</title>
-        <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
-        <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600&display=swap" rel="stylesheet">
-    </head>
-    <body class="zebra-stripes">
-        <div class="main-content">
-            <h1 style="text-align:center;">Palettes</h1>
-            <div class = "list-container">
-                <ul style="text-align:center;">
-                    {% for palette in palettes %}
-                    <li>{{palette.palette_name}} by {{palette.username}}</li>
-                    {% endfor %}
-                </ul>
-            </div>
-        </div>
-    </body>
-</html>
+{% extends "base_logged_in.html" %}
+
+{% block title %}Palettes{% endblock %}
+
+{% block content %}
+<h1 style="text-align:center;">Palettes: {{ query_type }}</h1>
+<div class="list-container">
+    <ul style="text-align:center;">
+        {% for palette in palettes %}
+            <li>{{ palette.palette_name }} by {{ palette.username }}</li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}

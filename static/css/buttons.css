@@ -52,3 +52,8 @@ button:disabled {
     background-color: #f46f8f;
     color: #f5f5f5;
 }
+
+.logout-form button:hover {
+    background-color: #f46f8f;
+    color: #f5f5f5;
+}

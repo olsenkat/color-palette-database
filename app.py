@@ -84,6 +84,44 @@ def fetch_palettes():
         session["palettes"] = get_palettes_by_user("katie")
     return session["palettes"]
 
+def get_palette_colors(palette_name):
+    """Returns a palette's colors."""
+    conn = get_db_connection()
+    cursor = conn.cursor(dictionary=True)
+    cursor.execute(
+        """
+        SELECT c.hex_value
+        FROM palette_color pc
+        JOIN palette p ON pc.palette_id = p.palette_id
+        JOIN color c ON pc.color_id = c.color_id
+        WHERE p.name = %s
+        ORDER BY pc.order_index
+    """,
+        (palette_name,),
+    )
+    colors = cursor.fetchall()
+    cursor.close()
+    conn.close()
+    return [color['hex_value'] for color in colors]
+
+def get_palette_tags(palette_name):
+    """Returns a palette's tags."""
+    conn = get_db_connection()
+    cursor = conn.cursor(dictionary=True)
+    cursor.execute(
+        """
+        SELECT p.name AS palette, t.name as tag_name
+        FROM palette_tag pt
+        JOIN palette p ON pt.palette_id = t.palette_id
+        JOIN tags t ON pt.tag_id = t.tag_id
+        WHERE p.name = %s
+    """,
+        (palette_name,),
+    )
+    tags = cursor.fetchall()
+    cursor.close()
+    conn.close()
+    return tags
 
 ########################################################
 #                Authentication
@@ -202,11 +240,36 @@ def logout():
 @login_required
 def palettes():
     username = session["username"]
-    palettes = fetch_palettes()
+    all_palettes = fetch_palettes()
+
+    # Pagination
+    page = int(request.args.get("page", 1))
+    per_page = 8
+    start = (page - 1) * per_page
+    end = start + per_page
+
+    palettes_page = all_palettes[start:end]
+
+    palette_colors = {
+        palette['palette_name']: get_palette_colors(palette['palette_name'])
+        for palette in palettes_page
+    }
+
+    # palette_tags = {
+    #     palette.palette_name: get_palette_tags(palette.palette_name)
+    #     for palette in palettes
+    # }
+
+    total_pages = (len(all_palettes) + per_page - 1)
+
     return render_template(
         "palette-list.html",
-        palettes=palettes,
+        palettes=palettes_page,
+        palette_colors=palette_colors,
+        # palette_tags=palette_tags,
         username=username,
+        page=page,
+        total_pages=total_pages,
         query_type=session["query_type"],
         fetch_url=url_for("palettes_fetch"),
     )
@@ -229,6 +292,7 @@ def tags():
 def colors():
     username = session["username"]
     palettes = fetch_palettes()
+    # colors = get_colors()
     return render_template(
         "edit-palette.html",
         palettes=palettes,

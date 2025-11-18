@@ -5,20 +5,24 @@
     <div class="content-container">
         <nav class="sidenav">
             <form method="POST" action="{{ fetch_url }}" id="dropdownForm">
-                <select id="myDropdown" name="myDropdown" class="myDropdown", onchange="this.form.submit()">
-                    <option value="{{ username }}" {% if query_type == username %}selected{% endif %}>{{ username }}</option>
-                    <option value="all-users" {% if query_type == "all-users" %}selected{% endif %}>All Users</option>
+                <select id="myDropdown" name="myDropdown" class="myDropdown" , onchange="this.form.submit()">
+                    <option value="{{ username }}" {% if query_type==username %}selected{% endif %}>{{ username }}
+                    </option>
+                    <option value="all-users" {% if query_type=="all-users" %}selected{% endif %}>All Users</option>
 
                 </select>
             </form>
             <form method="POST" action="/palettes-fetch">
-                <button type="submit" class="nav-btn">Palettes</button>
+                <button type="submit"
+                    class="nav-btn {% if request.path == '/palettes' %}active{% endif %}">Palettes</button>
             </form>
             <form method="POST" action="/tags-fetch">
-                <button type="submit" class="nav-btn">Tags</button>
+                <button type="submit"
+                    class="nav-btn {% if request.path.startswith('/tags') %}active{% endif %}">Tags</button>
             </form>
             <form method="POST" action="/colors-fetch">
-                <button type="submit" class="nav-btn">Colors</button>
+                <button type="submit"
+                    class="nav-btn {% if request.path.startswith('/colors') %}active{% endif %}">Colors</button>
             </form>
 
             <form action="/logout" method="post" class="logout-form">

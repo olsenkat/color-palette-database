@@ -3,12 +3,31 @@
 {% block title %}Palettes{% endblock %}
 
 {% block content %}
-<h1 style="text-align:center;">Palettes: {{ query_type }}</h1>
-<div class="list-container">
-    <ul style="text-align:center;">
-        {% for palette in palettes %}
-            <li>{{ palette.palette_name }} by {{ palette.username }}</li>
-        {% endfor %}
-    </ul>
+<div class="palettes-grid">
+    {% for palette in palettes %}
+        <div class="palette-box">
+            <div class="palette-title">
+                <h3>{{ palette['palette_name'] }}</h3>
+            </div>
+            <div class="palette-colors">
+                {% for color in palette_colors[palette['palette_name']] %}
+                    <div class="color-box" style="--box-color: {{ color }};"></div>
+                {% endfor %}
+            </div>
+        </div>
+        
+    {% endfor %}
+</div>
+
+<div class="pagination">
+    {% if page > 1 %}
+        <a href="{{ url_for('palettes', page=page-1)}}">Previous</a>
+    {% endif %}
+
+    Page {{ page }} of {{ total_pages }}
+
+    {% if page < total_pages %}
+        <a href="{{ url_for('palettes', page=page+1)}}">Next</a>
+    {% endif %}
 </div>
 {% endblock %}
