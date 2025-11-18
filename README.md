@@ -9,7 +9,8 @@ Each palette can include multiple colors, tags, and descriptions, enabling artis
 
 This project demonstrates **relational database modeling, SQL queries, and CRUD operations** using PostgreSQL and Flask (Python).  
 - CRUD operations involve Creating, Reading, Updating, and Deleting SQL data.
-- Flask will handle basic web development
+- Flask will handle basic backend website operations
+  
 This was developed as a final project for BYU's **Database Modeling Concepts** course.
 
 ---
@@ -24,7 +25,8 @@ This was developed as a final project for BYU's **Database Modeling Concepts** c
 - Visual display of palettes using CSS color blocks
 - (Stretch goal) Create palette from imported picture
 - (Stretch goal) Download palette for printing
-- (Optional) Filter or sort palettes by hue, brightness, or saturation  
+- (Stretch goal) Look for colors that are similar - colors that have been with this color on a palette.
+- (Stretch goal) Implement this as a public web application using Render or PythonAnywhere.
 
 ---
 
@@ -50,10 +52,11 @@ This was developed as a final project for BYU's **Database Modeling Concepts** c
 ## 🧰 System Design - Technologies Used
 | Layer | Technology | Purpose |
 |--------|-------------|----------|
-| Database | **PostgreSQL** (or SQLite) | Main SQL database |
+| Database | **MySql or SQLlite** (or SQLite) | Main SQL database |
 | Backend | **Python (Flask)** | API + database connection |
 | Frontend | **HTML, CSS, JavaScript** | Display palettes and forms |
 | Version Control | **Git + GitHub** | Version tracking and public repo |
+| Optional WebHosting Platform | **Render** or **PythonAnywhere** | Hosting the webpage and Database |
 | Optional | **Chart.js / Tailwind CSS** | Data visualization or styling |
 
 <img width="391" height="311" alt="palette_system_design drawio" src="https://github.com/user-attachments/assets/66be9b43-9725-4417-8020-d690e681d5e4" />
