@@ -1,0 +1,14 @@
+{% extends "base_logged_in.html" %}
+
+{% block title %}Palettes{% endblock %}
+
+{% block content %}
+<h1 style="text-align:center;">Palettes: {{ query_type }}</h1>
+<div class="list-container">
+    <ul style="text-align:center;">
+        {% for palette in palettes %}
+            <li>{{ palette.palette_name }} by {{ palette.username }}</li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}

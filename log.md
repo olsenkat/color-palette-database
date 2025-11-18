@@ -7,4 +7,7 @@
 | 11/6/2025 | Tested SQL script, Created Python Scripts to Start DB, Added fake data to test. | 1 |
 | 11/6/2025 | Created the initial flask application. Finished html for login page, and website base setup. | 3 |
 | 11/7/2025 | Updated the login page - on the button press it stores the user info in the database, changed webpage/display based on authentication. | 1 |
-| **Total** |  | **7** |
+| 11/13/2025 | Updated endpoint for login, created a main page, removed some duplication. Created base pages for other portions of website. | 1.5 |
+| 11/17/2025 | Working on switching between viewing all user palettes and just personal user palettes. | 1 |
+| 11/18/2025 | Removed lots of duplication, added base pages, can view user palettes or all palettes based on dropdown | 2.5 |
+| **Total** |  | **12** |

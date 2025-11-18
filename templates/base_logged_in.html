@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block body %}
+<div class="main-content">
+    <div class="content-container">
+        <nav class="sidenav">
+            <form method="POST" action="{{ fetch_url }}" id="dropdownForm">
+                <select id="myDropdown" name="myDropdown" class="myDropdown", onchange="this.form.submit()">
+                    <option value="{{ username }}" {% if query_type == username %}selected{% endif %}>{{ username }}</option>
+                    <option value="all-users" {% if query_type == "all-users" %}selected{% endif %}>All Users</option>
+
+                </select>
+            </form>
+            <form method="POST" action="/palettes-fetch">
+                <button type="submit" class="nav-btn">Palettes</button>
+            </form>
+            <form method="POST" action="/tags-fetch">
+                <button type="submit" class="nav-btn">Tags</button>
+            </form>
+            <form method="POST" action="/colors-fetch">
+                <button type="submit" class="nav-btn">Colors</button>
+            </form>
+
+            <form action="/logout" method="post" class="logout-form">
+                <button type="submit" class="logout-btn nav-btn">Logout</button>
+            </form>
+        </nav>
+        <div class="page-content">
+            {% block content %}{% endblock %}
+        </div>
+    </div>
+</div>
+{% endblock %}
