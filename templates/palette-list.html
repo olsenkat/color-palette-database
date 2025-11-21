@@ -3,31 +3,119 @@
 {% block title %}Palettes{% endblock %}
 
 {% block content %}
-<div class="palettes-grid">
-    {% for palette in palettes %}
-        <div class="palette-box">
-            <div class="palette-title">
-                <h3>{{ palette['palette_name'] }}</h3>
-            </div>
-            <div class="palette-colors">
-                {% for color in palette_colors[palette['palette_name']] %}
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const panel = document.getElementById('palette-options-panel');
+        const selectedName = document.getElementById('selected-palette-name');
+        const editLink = document.getElementById('edit-link');
+        const deleteForm = document.getElementById('delete-form')
+
+        let currentSelectedBox = null;
+        let currentSelectedTitle = null;
+        console.log("here")
+
+        document.querySelectorAll('.palette-box').forEach(box => {
+            const title = box.querySelector('.palette-title');
+            console.log("2")
+            box.addEventListener('click', () => {
+                const paletteName = box.dataset.paletteName;
+
+                // Deselect
+                if (currentSelectedBox == box) {
+                    panel.classList.add('hidden');
+                    if (currentSelectedTitle) {
+                        currentSelectedTitle.classList.remove('palette-selected')
+                    }
+                    currentSelectedBox = null;
+                    return;
+                }
+
+                // Remove previous
+                if (currentSelectedTitle) {
+                    currentSelectedTitle.classList.remove('palette-selected');
+                }
+
+                currentSelectedBox = box;
+                currentSelectedTitle = title;
+                panel.classList.remove('hidden');
+
+                currentSelectedTitle.classList.add('palette-selected');
+                editLink.setAttribute('href', `/palettes/${encodeURIComponent(paletteName)}/edit`);
+                deleteForm.setAttribute('action', `/palettes/${encodeURIComponent(paletteName)}/delete`);
+
+                console.log("setting links")
+                // editLink.href = `/palettes/${encodeURIComponent(paletteName)}/edit`;
+                // deleteForm.action = `/palettes/${encodeURIComponent(paletteName)}/delete`;
+            })
+        })
+    })
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const deleteBtn = document.getElementById("delete-button");
+        const deleteForm = document.getElementById("delete-form");
+
+        deleteBtn.addEventListener("click", () => {
+            Swal.fire({
+                title: "Delete this palette?",
+                text: "This action cannot be undone.",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#d33",
+                cancelButtonColor: "#3085d6",
+                confirmButtonText: "Yes, delete it",
+                cancelButtonText: "Cancel"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    deleteForm.submit();
+                }
+            });
+        });
+    });
+</script>
+
+
+<div class="palette-main">
+    <div class="palettes-container">
+        <div class="palettes-grid">
+            {% for palette in palettes %}
+            <div class="palette-box" data-palette-name="{{ palette['palette_name'] }}">
+                <div class="palette-title">
+                    <h3>{{ palette['palette_name'] }}</h3>
+                </div>
+
+                <div class="palette-colors">
+                    {% for color in palette_colors[palette['palette_name']] %}
                     <div class="color-box" style="--box-color: {{ color }};"></div>
-                {% endfor %}
+                    {% endfor %}
+                </div>
             </div>
+
+            {% endfor %}
         </div>
-        
-    {% endfor %}
+
+        <div class="pagination">
+            {% if page > 1 %}
+            <a href="{{ url_for('palettes', page=page-1)}}">Previous</a>
+            {% endif %}
+
+            Page {{ page }} of {{ total_pages }}
+
+            {% if page < total_pages %} <a href="{{ url_for('palettes', page=page+1)}}">Next</a>
+                {% endif %}
+        </div>
+    </div>
+
+    <div id="palette-options-panel" class="palette-options-panel hidden">
+        <!-- <p id="selected-palette-name">Select a palette</p> -->
+        <a id="edit-link" class="edit-link" href="#">Edit Palette</a>
+        <form id="delete-form" method="POST" action="#">
+            <button id="delete-button" type="button" class="delete-button">
+                Delete Palette
+            </button>
+        </form>
+    </div>
 </div>
 
-<div class="pagination">
-    {% if page > 1 %}
-        <a href="{{ url_for('palettes', page=page-1)}}">Previous</a>
-    {% endif %}
-
-    Page {{ page }} of {{ total_pages }}
-
-    {% if page < total_pages %}
-        <a href="{{ url_for('palettes', page=page+1)}}">Next</a>
-    {% endif %}
-</div>
 {% endblock %}

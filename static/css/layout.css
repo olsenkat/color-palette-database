@@ -59,12 +59,60 @@
     /* padding-right: 10px; */
     width: 200px;
     height: 30px;
+    cursor: pointer;
 
     display: flex;              /* enable flexbox */
     justify-content: center;    /* center horizontally */
     align-items: center;        /* center vertically */
     text-align: center;         /* center multiline text */
 }
+
+.palettes-container {
+    display: flex;
+    flex-direction: column;
+    /* gap: 20px; */
+}
+
+.palette-main {
+    display: flex;
+    flex-direction: row;
+}
+
+.palette-selected {
+    border-color: #f4567b;;
+    background-color: #ffb5c1;
+}
+
+.palette-options-panel {
+    background-color: #fff;
+    padding: 10px 15px;
+}
+
+.palette-options-panel a,
+.palette-options-panel button {
+    display: block;
+    margin: 5px 0;
+    font-weight: bold;
+    color: #f4567b;
+    text-decoration: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.palette-options-panel a:hover,
+.palette-options-panel button:hover {
+    text-decoration: underline;
+}
+
+.hidden {
+    display: none !important;
+}
+
+.edit-link {
+    color: #28a745 !important;
+}
+
 
 .palette-box {
     border-radius: 8px;

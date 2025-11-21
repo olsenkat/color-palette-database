@@ -84,6 +84,7 @@ def fetch_palettes():
         session["palettes"] = get_palettes_by_user("katie")
     return session["palettes"]
 
+
 def get_palette_colors(palette_name):
     """Returns a palette's colors."""
     conn = get_db_connection()
@@ -102,7 +103,8 @@ def get_palette_colors(palette_name):
     colors = cursor.fetchall()
     cursor.close()
     conn.close()
-    return [color['hex_value'] for color in colors]
+    return [color["hex_value"] for color in colors]
+
 
 def get_palette_tags(palette_name):
     """Returns a palette's tags."""
@@ -122,6 +124,7 @@ def get_palette_tags(palette_name):
     cursor.close()
     conn.close()
     return tags
+
 
 ########################################################
 #                Authentication
@@ -204,6 +207,7 @@ def main_page():
         query_type=session.get("query_type", username),
     )
 
+
 @app.route("/palettes-fetch", methods=["POST"])
 @login_required
 def palettes_fetch():
@@ -251,7 +255,7 @@ def palettes():
     palettes_page = all_palettes[start:end]
 
     palette_colors = {
-        palette['palette_name']: get_palette_colors(palette['palette_name'])
+        palette["palette_name"]: get_palette_colors(palette["palette_name"])
         for palette in palettes_page
     }
 
@@ -260,7 +264,7 @@ def palettes():
     #     for palette in palettes
     # }
 
-    total_pages = (len(all_palettes) + per_page - 1)
+    total_pages = len(all_palettes) + per_page - 1
 
     return render_template(
         "palette-list.html",
@@ -273,6 +277,7 @@ def palettes():
         query_type=session["query_type"],
         fetch_url=url_for("palettes_fetch"),
     )
+
 
 @app.route("/tags", methods=["GET"])
 @login_required
@@ -287,6 +292,7 @@ def tags():
         fetch_url=url_for("tags_fetch"),
     )
 
+
 @app.route("/colors", methods=["GET"])
 @login_required
 def colors():
@@ -300,6 +306,32 @@ def colors():
         query_type=session.get("query_type", username),
         fetch_url=url_for("colors_fetch"),
     )
+
+
+@app.route("/palettes/<palette_name>/edit", methods=["GET", "POST"])
+@login_required
+def edit_palette(palette_name):
+    username = session["username"]
+    colors = get_palette_colors(palette_name)
+
+    return render_template(
+        "edit-palette.html",
+        palette_name=palette_name,
+        query_type=session["query_type"],
+        colors=colors,
+        username=username,
+    )
+
+
+@app.route("/palettes/<palette_name>/delete", methods=["GET", "POST"])
+@login_required
+def delete_palette(palette_name):
+    username = session["username"]
+    # your logic here 
+    # TODO delete palette
+
+
+    return redirect(url_for("palettes") or request.referrer)
 
 
 if __name__ == "__main__":

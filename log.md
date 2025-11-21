@@ -11,4 +11,5 @@
 | 11/17/2025 | Working on switching between viewing all user palettes and just personal user palettes. | 1 |
 | 11/18/2025 | Removed lots of duplication, added base pages, can view user palettes or all palettes based on dropdown | 2.5 |
 | 11/18/2025 | Sidenav now shows what tab we are on. Created mini palettes for viewing palettes. Created pagination for viewing palettes. Made palette page look similar to what I want. Updated formatting for tags/colors temp page. | 2 |
-| **Total** |  | **14** |
+| 11/20/2025 | Updated login button. Worked on making palettes clickable, adding options to edit or delete palettes when selected. Popup to confirm delete. Added routes for editing and deleting palettes - these are not implemented in flask yet. | 3.5 |
+| **Total** |  | **17.5** |
