@@ -3,12 +3,127 @@
 {% block title %}Palettes{% endblock %}
 
 {% block content %}
-<h1 style="text-align:center;">Palettes: {{ query_type }}</h1>
-<div class="list-container">
-    <ul style="text-align:center;">
-        {% for palette in palettes %}
-            <li>{{ palette.palette_name }} by {{ palette.username }}</li>
-        {% endfor %}
-    </ul>
+<div class="edit-palette-content">
+    <h1 style="text-align:center;">{{ palette['name'] }}</h1>
+    <div class="palette-edit-color" data-palette-name="{{ palette['name'] }}">
+        <h4>Add Color</h4>
+        <form method="POST" action="/add_color">
+            <div class="color_name">
+                <label for="color_name">Name: </label>
+                <input type="text" class="color_name" id="color_name" name="color_name" 
+                placeholder="e.g. pale-pink" onkeyup="check_input()">
+            </div>
+            <div class="color-form-group">
+                <label for="hex">Hex:</label>
+                <div style="display:flex; align-items:center;">
+                    <span style="user-select:none;">#</span>
+                    <input type="text" class="color-picker-text" id="hex" name="hex" 
+                        placeholder="FFFFFF" maxlength="6" 
+                        style="width:70px; text-transform:uppercase;" onkeyup="check_input()">
+                </div>
+                
+                <label for="color_picker"></label>
+                <input type="color" id="color_picker" name="new_color" value="#a6a6a6">
+            </div>
+        </form>
+        <button type="button" id="add_color_button" class="add-color-button" disabled>Add Color</button>
+    </div>
+    <div class="palette-box" data-palette-name="{{ palette['name'] }}">
+        <div class="palette-colors">
+            {% for color in colors %}
+            <div class="color-box" style="--box-color: {{ color }};"></div>
+            {% endfor %}
+        </div>
+    </div>
 </div>
+<script>
+    let colorPicker = document.getElementById("color_picker");
+    let hexInput = document.getElementById("hex");
+
+    hexInput.value = colorPicker.value.slice(1);
+
+    hexInput.addEventListener('input', () => {
+        hexInput.value = hexInput.value.replace(/[^0-9A-Fa-f]/g, '').toUpperCase();
+
+        if (hexInput.value.length > 6) {
+            hexInput.value = hexInput.value.slice(0,6);
+        }
+
+        colorPicker.value = '#' + (hexInput.value.padEnd(6, '0'))
+
+        check_input()
+    })
+</script>
+<script>
+    function check_input() {
+        const color_name = document.getElementById("color_name").value.trim();
+        const hex = document.getElementById("hex").value.trim();
+        const button = document.getElementById("add_color_button");
+        button.disabled = !(color_name && hex);
+    }
+</script>
+<script>
+
+    function hexToRgb(hex) {
+        // Remove # if present
+        hex = hex.replace(/^#/, '');
+
+        // Parse the 6-digit hex
+        const bigint = parseInt(hex, 16);
+        const r = (bigint >> 16) & 255;
+        const g = (bigint >> 8) & 255;
+        const b = bigint & 255;
+
+        return { r, g, b };
+    }
+    colorPicker.addEventListener('input', () => {
+        hexInput.value = colorPicker.value.slice(1);
+        check_input();
+    });
+
+    document.getElementById("add_color_button").addEventListener("click", async () => {
+        const colorName = document.getElementById("color_name").value.trim();
+        const colorValue = document.getElementById("color_picker").value;
+        const rgb = hexToRgb(colorValue);
+        const paletteName = "{{ palette['name'] }}";  // pass the palette name from Flask
+
+        // Send POST request with JSON
+        const response = await fetch("/add_color_ajax", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                palette: paletteName,
+                name: colorName,
+                hex: colorValue,
+                r: rgb.r,
+                g: rgb.g,
+                b: rgb.b
+            })
+        });
+
+        if (response.ok) {
+            const data = await response.json();
+            // Update the palette colors dynamically
+            const container = document.querySelector(".palette-colors");
+            container.innerHTML = "";  // clear existing
+            data.colors.forEach(c => {
+                const div = document.createElement("div");
+                div.classList.add("color-box");
+                div.style.setProperty("--box-color", c);
+                container.appendChild(div);
+            });
+
+            // Reset inputs
+            document.getElementById("color_name").value = "";
+            document.getElementById("hex").value = "";
+            document.getElementById("add_color_button").disabled = true;
+            document.getElementById("hex").focus();
+        } else {
+            alert("Failed to add color.");
+        }
+    });
+</script>
+
 {% endblock %}

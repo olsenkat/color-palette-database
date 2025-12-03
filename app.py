@@ -1,4 +1,13 @@
-from flask import Flask, render_template, request, redirect, url_for, flash, session
+from flask import (
+    Flask,
+    render_template,
+    request,
+    redirect,
+    url_for,
+    flash,
+    session,
+    jsonify,
+)
 import mysql.connector
 from functools import wraps
 
@@ -51,6 +60,16 @@ def get_all_palettes():
     return palettes
 
 
+def get_palette_by_name(palette_name):
+    conn = get_db_connection()
+    cursor = conn.cursor(dictionary=True)
+
+    cursor.execute("SELECT * FROM palette WHERE name = %s LIMIT 1", (palette_name,))
+    palette = cursor.fetchone()
+
+    return palette
+
+
 def get_current_user():
     """Return the logged-in username or redirect to login"""
     username = session["username"]
@@ -85,6 +104,11 @@ def fetch_palettes():
     return session["palettes"]
 
 
+########################################################
+#                Helper Color Functions
+########################################################
+
+
 def get_palette_colors(palette_name):
     """Returns a palette's colors."""
     conn = get_db_connection()
@@ -104,6 +128,56 @@ def get_palette_colors(palette_name):
     cursor.close()
     conn.close()
     return [color["hex_value"] for color in colors]
+
+
+def add_color_to_palette(palette_name, color_name, hex_value, r, g, b):
+    conn = get_db_connection()
+    cursor = conn.cursor(dictionary=True)
+
+    # Insert new color
+    cursor.execute(
+        """
+        INSERT INTO color (hex_value, r, g, b, name)
+        VALUES
+        (%s, %s, %s, %s, %s)
+        """,
+        (hex_value, r, g, b, color_name),
+    )
+    color_id = cursor.lastrowid
+
+    # Get palette_id
+    cursor.execute("SELECT palette_id FROM palette WHERE name = %s", (palette_name,))
+    palette_row = cursor.fetchone()
+    if not palette_row:
+        raise ValueError(f"Palette '{palette_name}' not found")
+    palette_id = palette_row["palette_id"]
+
+    # Determine next order index
+    cursor.execute(
+        "SELECT COUNT(*) AS count FROM palette_color WHERE palette_id = %s",
+        (palette_id,),
+    )
+    count_row = cursor.fetchone()
+    order_index = count_row["count"] + 1
+
+    # Link color to palette
+    cursor.execute(
+        """
+        INSERT INTO palette_color (palette_id, color_id, order_index)
+        VALUES
+        (%s, %s, %s)
+        """,
+        (palette_id, color_id, order_index),
+    )
+
+    conn.commit()
+    cursor.close()
+    conn.close()
+
+
+########################################################
+#                Helper Tag functions
+########################################################
 
 
 def get_palette_tags(palette_name):
@@ -312,7 +386,12 @@ def colors():
 @login_required
 def edit_palette(palette_name):
     username = session["username"]
-    colors = get_palette_colors(palette_name)
+
+    palette = get_palette_by_name(palette_name)
+    if not palette:
+        flash("Palette is not defined")
+
+    colors = get_palette_colors(palette["name"])
 
     return render_template(
         "edit-palette.html",
@@ -320,6 +399,7 @@ def edit_palette(palette_name):
         query_type=session["query_type"],
         colors=colors,
         username=username,
+        palette=palette,
     )
 
 
@@ -327,11 +407,38 @@ def edit_palette(palette_name):
 @login_required
 def delete_palette(palette_name):
     username = session["username"]
-    # your logic here 
+    # your logic here
     # TODO delete palette
 
-
     return redirect(url_for("palettes") or request.referrer)
+
+
+@app.route("/add_color_ajax", methods=["POST"])
+@login_required
+def add_color_ajax():
+    try:
+        data = request.get_json()
+
+        palette_name = data.get("palette")
+        color_name = data.get("name")
+        hex_val = data.get("hex")
+        r = data.get("r")
+        g = data.get("g")
+        b = data.get("b")
+
+        # Save the color to your database
+        add_color_to_palette(palette_name, color_name, hex_val, r, g, b)
+
+        # Fetch updated colors
+        colors = get_palette_colors(palette_name)
+
+        # returns list of hex strings
+        return jsonify({"colors": colors})
+    except Exception as e:
+        # Log to console
+        print("Error in add_color_ajax:", e)
+        # Return JSON with error for debugging
+        return jsonify({"error": str(e)}), 500
 
 
 if __name__ == "__main__":

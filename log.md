@@ -12,4 +12,7 @@
 | 11/18/2025 | Removed lots of duplication, added base pages, can view user palettes or all palettes based on dropdown | 2.5 |
 | 11/18/2025 | Sidenav now shows what tab we are on. Created mini palettes for viewing palettes. Created pagination for viewing palettes. Made palette page look similar to what I want. Updated formatting for tags/colors temp page. | 2 |
 | 11/20/2025 | Updated login button. Worked on making palettes clickable, adding options to edit or delete palettes when selected. Popup to confirm delete. Added routes for editing and deleting palettes - these are not implemented in flask yet. | 3.5 |
-| **Total** |  | **17.5** |
+| 11/28/2025 | Started adding an edit palette page. | 0.75 |
+| 12/01/2025 | Worked on Palette-editor page. Added hex input, created pretty color selector. Working on combining the two. | 1.25 |
+| 12/02/2025 | Worked on edit palette: can add colors and it calls the database and updates the page (displays the new colors). Also made it so the hex input box updates the color picker and vice versa. User now has to name the color. | 2 |
+| **Total** |  | **21.5** |
