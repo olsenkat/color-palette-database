@@ -87,7 +87,7 @@
 
                 <div class="palette-colors">
                     {% for color in palette_colors[palette['palette_name']] %}
-                    <div class="color-box" style="--box-color: {{ color }};"></div>
+                    <div class="color-box" style="--box-color: {{ color['hex_value'] }};"></div>
                     {% endfor %}
                 </div>
             </div>

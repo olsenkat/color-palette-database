@@ -138,7 +138,23 @@
     height: 60px;
     flex: 1 1 auto;
     background-color: var(--box-color);
+    display: grid;
+    align-items: start;
+    justify-items: end;
+    padding: 3px;
 }
+
+/* Close color buttons*/
+.delete_color_button {
+    color: rgb(237, 237, 237);
+    padding: 0px 3px;
+    border-radius: 30px;
+    font-size: 10px;
+    font-weight: bold;
+    background-color: rgb(255, 78, 78) !important;
+    border: 1px solid black;
+}
+
 
 /* Last color box in the row keeps its right border */
 .color-box:last-child {
@@ -252,4 +268,3 @@ input[type="color"]::-webkit-color-swatch-wrapper {
 input[type="color"]::-webkit-color-swatch {
   border: none; 
 }
-

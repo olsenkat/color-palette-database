@@ -28,7 +28,7 @@ def get_db_connection():
 
 def get_palettes_by_user(username):
     conn = get_db_connection()
-    cursor = conn.cursor(dictionary=True)
+    cursor = conn.cursor(dictionary=True, buffered=True)
     cursor.execute(
         """
         SELECT p.name AS palette_name, u.username
@@ -46,7 +46,7 @@ def get_palettes_by_user(username):
 
 def get_all_palettes():
     conn = get_db_connection()
-    cursor = conn.cursor(dictionary=True)
+    cursor = conn.cursor(dictionary=True, buffered=True)
     cursor.execute(
         """
         SELECT p.name AS palette_name, u.username
@@ -62,7 +62,7 @@ def get_all_palettes():
 
 def get_palette_by_name(palette_name):
     conn = get_db_connection()
-    cursor = conn.cursor(dictionary=True)
+    cursor = conn.cursor(dictionary=True, buffered=True)
 
     cursor.execute("SELECT * FROM palette WHERE name = %s LIMIT 1", (palette_name,))
     palette = cursor.fetchone()
@@ -109,10 +109,10 @@ def fetch_palettes():
 ########################################################
 
 
-def get_palette_colors(palette_name):
+def get_palette_colors_hex(palette_name):
     """Returns a palette's colors."""
     conn = get_db_connection()
-    cursor = conn.cursor(dictionary=True)
+    cursor = conn.cursor(dictionary=True, buffered=True)
     cursor.execute(
         """
         SELECT c.hex_value
@@ -129,10 +129,30 @@ def get_palette_colors(palette_name):
     conn.close()
     return [color["hex_value"] for color in colors]
 
+def get_palette_colors(palette_name):
+    """Returns a palette's colors."""
+    conn = get_db_connection()
+    cursor = conn.cursor(dictionary=True, buffered=True)
+    cursor.execute(
+        """
+        SELECT c.color_id, c.name, c.hex_value
+        FROM palette_color pc
+        JOIN palette p ON pc.palette_id = p.palette_id
+        JOIN color c ON pc.color_id = c.color_id
+        WHERE p.name = %s
+        ORDER BY pc.order_index
+    """,
+        (palette_name,),
+    )
+    colors = cursor.fetchall()
+    cursor.close()
+    conn.close()
+    return [{"color_id": color["color_id"], "hex_value": color["hex_value"]} for color in colors]
+
 
 def add_color_to_palette(palette_name, color_name, hex_value, r, g, b):
     conn = get_db_connection()
-    cursor = conn.cursor(dictionary=True)
+    cursor = conn.cursor(dictionary=True, buffered=True)
 
     # Insert new color
     cursor.execute(
@@ -174,6 +194,31 @@ def add_color_to_palette(palette_name, color_name, hex_value, r, g, b):
     cursor.close()
     conn.close()
 
+def delete_color_from_palette(palette_name, color_id):
+    color_id = int(color_id)
+
+    conn = get_db_connection()
+    cursor = conn.cursor(dictionary=True, buffered=True)
+
+    cursor.execute("SELECT palette_id FROM palette WHERE name = %s", (palette_name,))
+    palette_row = cursor.fetchone()
+    if not palette_row:
+        cursor.close()
+        conn.close()
+        raise ValueError(f"Palette '{palette_name}' not found")
+    palette_id = palette_row["palette_id"]
+
+    # Delete color from palette
+    cursor.execute(
+        """
+        DELETE FROM palette_color
+        WHERE palette_id = %s AND color_id = %s
+        """,
+        (palette_id, color_id),
+    )
+    conn.commit()
+    cursor.close()
+    conn.close()
 
 ########################################################
 #                Helper Tag functions
@@ -359,13 +404,12 @@ def tags():
     username = session["username"]
     palettes = fetch_palettes()
     return render_template(
-        "edit-palette.html",
+        "temp.html",
         palettes=palettes,
         username=username,
-        query_type=session["query_type"],
+        query_type=session.get("query_type", username),
         fetch_url=url_for("tags_fetch"),
     )
-
 
 @app.route("/colors", methods=["GET"])
 @login_required
@@ -374,7 +418,7 @@ def colors():
     palettes = fetch_palettes()
     # colors = get_colors()
     return render_template(
-        "edit-palette.html",
+        "temp.html",
         palettes=palettes,
         username=username,
         query_type=session.get("query_type", username),
@@ -440,6 +484,29 @@ def add_color_ajax():
         # Return JSON with error for debugging
         return jsonify({"error": str(e)}), 500
 
+@app.route("/delete_color_ajax", methods=["POST"])
+@login_required
+def delete_color_ajax():
+    try:
+        data = request.get_json()
+
+        palette_name = data.get("palette")
+        color_id = data.get("color_id")
+
+        try:
+            delete_color_from_palette(palette_name, color_id)
+            colors = get_palette_colors(palette_name)
+            return jsonify({"colors": colors})
+        except Exception as e:
+            print("Error deleting color:", e)
+            return jsonify({"error": str(e)}), 500
+
+        
+    except Exception as e:
+        # Log to console
+        print("Error in delete_color_ajax:", e)
+        # Return JSON with error for debugging
+        return jsonify({"error": str(e)}), 500
 
 if __name__ == "__main__":
     app.run(debug=True)

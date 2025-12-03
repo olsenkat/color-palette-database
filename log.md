@@ -15,4 +15,5 @@
 | 11/28/2025 | Started adding an edit palette page. | 0.75 |
 | 12/01/2025 | Worked on Palette-editor page. Added hex input, created pretty color selector. Working on combining the two. | 1.25 |
 | 12/02/2025 | Worked on edit palette: can add colors and it calls the database and updates the page (displays the new colors). Also made it so the hex input box updates the color picker and vice versa. User now has to name the color. | 2 |
-| **Total** |  | **21.5** |
+| 12/03/2025 | Fixed broken tag/color links. Updated edit-palette where a color can be deleted from the palette (not from the database). Fixed issues with unclosed database connections.  | 1.5 |
+| **Total** |  | **23** |
