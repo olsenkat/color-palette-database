@@ -15,6 +15,13 @@ This was developed as a final project for BYU's **Database Modeling Concepts** c
 
 ---
 
+## Project TODOs:
+
+- Ensure palette names are unqiue
+- Make color name required and unique
+- Implement tags
+- Implement color creation and deletion
+
 ## 💡 Features to Implement
 - Simple login with username and email
 - Create, view, edit, and delete color palettes

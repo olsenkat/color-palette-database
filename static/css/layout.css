@@ -240,6 +240,88 @@
     color: #f5f5f5;
 } */
 
+/* Container positioning */
+.create-palette-icon {
+    position: relative;
+    display: inline-block;
+    text-decoration: none;
+    color: #fac54a; /* or whatever color fits your theme */
+    font-size: 36px;
+    margin: 10px auto;
+    cursor: pointer;
+}
+
+/* Tooltip styling */
+.create-palette-icon::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    left: 50%;
+    top: -40px;
+    transform: translateX(-50%);
+    background: #fac54a;
+    color: #fff;
+    padding: 6px 10px;
+    border-radius: 6px;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease;
+    font-size: 14px;
+    z-index: 20;
+}
+
+/* Tooltip arrow */
+.create-palette-icon::before {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: -10px;
+    transform: translateX(-50%);
+    border-width: 6px;
+    border-style: solid;
+    border-color: #fac54a transparent transparent transparent;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+    z-index: 20;
+}
+
+/* Show tooltip on hover */
+.create-palette-icon:hover::after,
+.create-palette-icon:hover::before {
+    opacity: 1;
+}
+
+
+/* Create palette */
+.create-palette {
+    /* border: 1px solid black; */
+    padding: 2px;
+    border-radius: 4px;
+    color: forestgreen !important;
+    font-weight: bold;
+    text-decoration: none;
+    /* background-color: lightgray */
+}
+
+.create-palette-panel {
+    background-color: #fff;
+    padding: 10px 15px;
+    margin-top: auto;
+}
+
+.right-sidebar {
+    display: flex;
+    flex-direction: column;
+
+    /* position: relative;
+    width: 250px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    border-radius: 10px;
+    min-height: 400px; */
+}
+
 .edit-palette-content {
     align-items: center;
     display: flex;
