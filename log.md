@@ -17,4 +17,6 @@
 | 12/02/2025 | Worked on edit palette: can add colors and it calls the database and updates the page (displays the new colors). Also made it so the hex input box updates the color picker and vice versa. User now has to name the color. | 2 |
 | 12/03/2025 | Fixed broken tag/color links. Updated edit-palette where a color can be deleted from the palette (not from the database). Fixed issues with unclosed database connections.  | 1.5 |
 | 12/03/2025 | Worked on getting an add palette icon in (took a while to do). idk if i will keep the color, but it is there. Need to add functionality for this next, will create a palette and take a user to the edit palette page for this.  | 1.25 |
-| **Total** |  | **24.25** |
+| 12/09/2025 | Classwork: Created the document for Final Project Collaboration and Reviews  | 0.5 |
+| 12/09/2025 | Classwork: Started Final Report, created powerpoint for presentation  | 1.25 |
+| **Total** |  | **26** |
