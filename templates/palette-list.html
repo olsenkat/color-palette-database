@@ -2,6 +2,20 @@
 
 {% block title %}Palettes{% endblock %}
 
+{% block flash_script %}
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        <script>
+            Swal.fire({
+                icon: 'success',
+                title: 'Palette Deleted',
+                text: '{{ messages[0] }}',
+            });
+        </script>
+        {% endif %}
+    {% endwith %}
+{% endblock %}
+
 {% block content %}
 <script>
     document.addEventListener('DOMContentLoaded', () => {
@@ -74,6 +88,49 @@
         });
     });
 </script>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+
+    const createBtn = document.querySelector(".create-palette-icon");
+
+    createBtn.addEventListener("click", (event) => {
+        event.preventDefault();
+
+        Swal.fire({
+            title: "Create New Palette",
+            input: "text",
+            inputLabel: "Palette Name",
+            inputPlaceholder: "Enter your palette name",
+            showCancelButton: true,
+            confirmButtonText: "Create",
+            preConfirm: (name) => {
+                if (!name) {
+                    Swal.showValidationMessage("Palette name is required");
+                }
+                return name;
+            }
+        }).then((result) => {
+            if (result.isConfirmed) {
+                const form = document.createElement("form");
+                form.method = "POST";
+                form.action = "/create-palette";
+
+                const input = document.createElement("input");
+                input.type = "hidden";
+                input.name = "palette_name";
+                input.value = result.value;
+
+                form.appendChild(input);
+                document.body.appendChild(form);
+                form.submit();
+            }
+        });
+    });
+
+});
+</script>
+
 
 
 <div class="palette-main">

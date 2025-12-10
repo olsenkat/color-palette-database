@@ -26,6 +26,19 @@ def get_db_connection():
     return conn
 
 
+def get_user_id(username):
+    conn = get_db_connection()
+    cursor = conn.cursor(dictionary=True, buffered=True)
+    cursor.execute("SELECT user_id FROM user WHERE username = %s", (username,))
+    user = cursor.fetchone()
+    cursor.close()
+    conn.close()
+    if user:
+        return user["user_id"]
+    else:
+        return None
+
+
 def get_palettes_by_user(username):
     conn = get_db_connection()
     cursor = conn.cursor(dictionary=True, buffered=True)
@@ -68,6 +81,43 @@ def get_palette_by_name(palette_name):
     palette = cursor.fetchone()
 
     return palette
+
+
+def insert_palette(palette_name, username):
+    conn = get_db_connection()
+    cursor = conn.cursor(dictionary=True, buffered=True)
+
+    # Get user_id
+    user_id = get_user_id(username)
+    if not user_id:
+        raise ValueError(f"User '{username}' not found")
+
+    # Insert new palette
+    cursor.execute(
+        "INSERT INTO palette (user_id, name, description) VALUES (%s, %s, %s)",
+        (user_id, palette_name, ""),
+    )
+    conn.commit()
+    cursor.close()
+    conn.close()
+
+def delete_palette_from_db(username, palette_name):
+    conn = get_db_connection()
+    cursor = conn.cursor(dictionary=True, buffered=True)
+
+    # Get user_id
+    user_id = get_user_id(username)
+    if not user_id:
+        raise ValueError(f"User '{username}' not found")
+
+    # Delete palette
+    cursor.execute(
+        "DELETE FROM palette WHERE name = %s AND user_id = %s",
+        (palette_name, user_id),
+    )
+    conn.commit()
+    cursor.close()
+    conn.close()
 
 
 def get_current_user():
@@ -129,6 +179,7 @@ def get_palette_colors_hex(palette_name):
     conn.close()
     return [color["hex_value"] for color in colors]
 
+
 def get_palette_colors(palette_name):
     """Returns a palette's colors."""
     conn = get_db_connection()
@@ -147,7 +198,10 @@ def get_palette_colors(palette_name):
     colors = cursor.fetchall()
     cursor.close()
     conn.close()
-    return [{"color_id": color["color_id"], "hex_value": color["hex_value"]} for color in colors]
+    return [
+        {"color_id": color["color_id"], "hex_value": color["hex_value"]}
+        for color in colors
+    ]
 
 
 def add_color_to_palette(palette_name, color_name, hex_value, r, g, b):
@@ -194,6 +248,7 @@ def add_color_to_palette(palette_name, color_name, hex_value, r, g, b):
     cursor.close()
     conn.close()
 
+
 def delete_color_from_palette(palette_name, color_id):
     color_id = int(color_id)
 
@@ -220,6 +275,7 @@ def delete_color_from_palette(palette_name, color_id):
     cursor.close()
     conn.close()
 
+
 ########################################################
 #                Helper Tag functions
 ########################################################
@@ -231,12 +287,12 @@ def get_palette_tags(palette_name):
     cursor = conn.cursor(dictionary=True)
     cursor.execute(
         """
-        SELECT p.name AS palette, t.name as tag_name
+        SELECT p.name AS palette, t.name AS tag_name
         FROM palette_tag pt
-        JOIN palette p ON pt.palette_id = t.palette_id
-        JOIN tags t ON pt.tag_id = t.tag_id
+        JOIN palette p ON pt.palette_id = p.palette_id
+        JOIN tag t ON pt.tag_id = t.tag_id
         WHERE p.name = %s
-    """,
+        """,
         (palette_name,),
     )
     tags = cursor.fetchall()
@@ -367,7 +423,7 @@ def palettes():
 
     # Pagination
     page = int(request.args.get("page", 1))
-    per_page = 8
+    per_page = 10
     start = (page - 1) * per_page
     end = start + per_page
 
@@ -403,13 +459,19 @@ def palettes():
 def tags():
     username = session["username"]
     palettes = fetch_palettes()
+    tags = []
+    for palette in palettes:
+        palette_tags = get_palette_tags(palette["palette_name"])
+        tags.extend(palette_tags)
     return render_template(
-        "temp.html",
+        "tags.html",
         palettes=palettes,
+        tags=tags,
         username=username,
         query_type=session.get("query_type", username),
         fetch_url=url_for("tags_fetch"),
     )
+
 
 @app.route("/colors", methods=["GET"])
 @login_required
@@ -452,8 +514,9 @@ def edit_palette(palette_name):
 def delete_palette(palette_name):
     username = session["username"]
     # your logic here
-    # TODO delete palette
+    delete_palette_from_db(username, palette_name)
 
+    flash(f"Deleted palette {palette_name} successfully.")
     return redirect(url_for("palettes") or request.referrer)
 
 
@@ -484,6 +547,7 @@ def add_color_ajax():
         # Return JSON with error for debugging
         return jsonify({"error": str(e)}), 500
 
+
 @app.route("/delete_color_ajax", methods=["POST"])
 @login_required
 def delete_color_ajax():
@@ -501,12 +565,25 @@ def delete_color_ajax():
             print("Error deleting color:", e)
             return jsonify({"error": str(e)}), 500
 
-        
     except Exception as e:
         # Log to console
         print("Error in delete_color_ajax:", e)
         # Return JSON with error for debugging
         return jsonify({"error": str(e)}), 500
+
+
+@app.route("/create-palette", methods=["POST"])
+@login_required
+def create_palette():
+    username = session["username"]
+    palette_name = request.form.get("palette_name")
+
+    if not palette_name:
+        return "Missing palette name", 400
+
+    insert_palette(palette_name, username)
+
+    return redirect(f"/palettes/{palette_name}/edit")
 
 if __name__ == "__main__":
     app.run(debug=True)

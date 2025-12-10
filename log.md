@@ -19,4 +19,5 @@
 | 12/03/2025 | Worked on getting an add palette icon in (took a while to do). idk if i will keep the color, but it is there. Need to add functionality for this next, will create a palette and take a user to the edit palette page for this.  | 1.25 |
 | 12/09/2025 | Classwork: Created the document for Final Project Collaboration and Reviews  | 0.5 |
 | 12/09/2025 | Classwork: Started Final Report, created powerpoint for presentation  | 1.25 |
-| **Total** |  | **26** |
+| 12/10/2025 | Added functionality for creating the palette and deleting the palette. Changed tags to display a list of user's tags.  | 1 |
+| **Total** |  | **27** |
