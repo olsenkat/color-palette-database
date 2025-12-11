@@ -158,6 +158,48 @@ def fetch_palettes():
 #                Helper Color Functions
 ########################################################
 
+def get_colors():
+    """Get User colors."""
+    conn = get_db_connection()
+    cursor = conn.cursor(dictionary=True, buffered=True)
+    cursor.execute("""
+        SELECT color.name as color_name, color.hex_value as hex, color.color_id FROM color
+        JOIN palette_color pc ON color.color_id = pc.color_id
+        JOIN palette p ON pc.palette_id = p.palette_id
+        JOIN user u ON p.user_id = u.user_id
+        WHERE u.username = %s
+    """, (session["username"],))
+    colors = cursor.fetchall()
+    cursor.close()
+    conn.close()
+    return colors
+
+def delete_color_from_database(color_name):
+    conn = get_db_connection()
+    cursor = conn.cursor(dictionary=True, buffered=True)
+
+    # Remove color from palettes
+    cursor.execute(
+        """
+        DELETE pc FROM palette_color pc
+        JOIN color c ON pc.color_id = c.color_id
+        WHERE c.name = %s
+        """,
+        (color_name,),
+    )
+    conn.commit()
+
+    # Delete color
+    cursor.execute(
+        """
+        DELETE c FROM color c
+        WHERE c.name = %s
+        """,
+        (color_name,),
+    )
+    conn.commit()
+    cursor.close()
+    conn.close()
 
 def get_palette_colors_hex(palette_name):
     """Returns a palette's colors."""
@@ -478,14 +520,39 @@ def tags():
 def colors():
     username = session["username"]
     palettes = fetch_palettes()
-    # colors = get_colors()
+    colors = get_colors()
+
+    # Pagination
+    page = int(request.args.get("page", 1))
+    per_page = 10
+    start = (page - 1) * per_page
+    end = start + per_page
+
+    colors_page = colors[start:end]
+
+    total_pages = len(colors) + per_page - 1
+
     return render_template(
-        "temp.html",
+        "colors.html",
         palettes=palettes,
         username=username,
+        total_pages = total_pages,
+        page=page,
+        colors=colors_page,
         query_type=session.get("query_type", username),
         fetch_url=url_for("colors_fetch"),
     )
+
+@app.route("/colors/<color_name>/delete", methods=["GET", "POST"])
+@login_required
+def delete_color(color_name):
+    username = session["username"]
+    # your logic here
+    delete_color_from_database(color_name)
+
+    flash(f"Deleted color {color_name} successfully.")
+    return redirect(request.referrer or url_for("colors"))
+
 
 
 @app.route("/palettes/<palette_name>/edit", methods=["GET", "POST"])

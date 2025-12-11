@@ -1,0 +1,186 @@
+{% extends "base_logged_in.html" %}
+
+{% block title %}Palettes{% endblock %}
+
+{% block content %}
+<h1 style="text-align:center;">Colors: {{ query_type }}</h1>
+<div class="palette-main">
+    <div class="palettes-container">
+        <div class="palettes-grid">
+            {% for color in colors %}
+            <div class="palette-box" data-color-name="{{ color.color_name }}">
+                <div class="palette-title">
+                    <h3>{{ color.color_name }}</h3>
+                </div>
+
+                <div class="palette-colors">
+                    <div class="color-box" style="--box-color: {{ color.hex }};"></div>
+                </div>
+            </div>
+
+            {% endfor %}
+        </div>
+
+        <div class="pagination">
+            {% if page > 1 %}
+            <a href="{{ url_for('colors', page=page-1)}}">Previous</a>
+            {% endif %}
+
+            Page {{ page }} of {{ total_pages }}
+
+            {% if page < total_pages %} <a href="{{ url_for('colors', page=page+1)}}">Next</a>
+                {% endif %}
+        </div>
+    </div>
+
+    <!-- <div class="right-sidebar">
+        <div id="color-options-panel" class="color-options-panel hidden">
+            <a id="edit-link" class="edit-link" href="#">Edit Color</a>
+            <form id="delete-form" method="POST" action="#">
+                <button id="delete-button" type="button" class="delete-button">
+                    Delete Color
+                </button>
+            </form>
+        </div>
+
+        <div class="create-palette-panel">
+            <a href="/create-color" class="create-palette-icon" data-tooltip="Create Color">
+                <i class="fas fa-plus-circle"></i>
+            </a>
+        </div>
+    </div> -->
+
+</div>
+
+
+<!-- Alerts when colors is deleted -->
+{% block flash_script %}
+{% with messages = get_flashed_messages() %}
+{% if messages %}
+
+<script>
+    Swal.fire({
+        icon: 'success',
+        title: 'Color Deleted',
+        text: '{{ messages[0] }}',
+    });
+</script>
+{% endif %}
+{% endwith %}
+{% endblock %}
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const panel = document.getElementById('color-options-panel');
+        const selectedName = document.getElementById('selected-color-name');
+        // const editLink = document.getElementById('edit-link');
+        const deleteForm = document.getElementById('delete-form')
+
+        let currentSelectedBox = null;
+        let currentSelectedTitle = null;
+
+        document.querySelectorAll('.palette-box').forEach(box => {
+            const title = box.querySelector('.palette-title');
+
+            box.addEventListener('click', () => {
+                const colorName = box.dataset.colorName;
+
+                // Deselect
+                if (currentSelectedBox == box) {
+                    panel.classList.add('hidden');
+                    if (currentSelectedTitle) {
+                        currentSelectedTitle.classList.remove('palette-selected')
+                    }
+                    currentSelectedBox = null;
+                    return;
+                }
+
+                // Remove previous
+                if (currentSelectedTitle) {
+                    currentSelectedTitle.classList.remove('palette-selected');
+                }
+
+                currentSelectedBox = box;
+                currentSelectedTitle = title;
+                panel.classList.remove('hidden');
+
+                currentSelectedTitle.classList.add('palette-selected');
+                // editLink.setAttribute('href', `/palettes/${encodeURIComponent(paletteName)}/edit`);
+                deleteForm.setAttribute('action', `/colors/${encodeURIComponent(colorName)}/delete`);
+
+                console.log("setting links")
+                // editLink.href = `/palettes/${encodeURIComponent(paletteName)}/edit`;
+                // deleteForm.action = `/palettes/${encodeURIComponent(paletteName)}/delete`;
+            })
+        })
+    })
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const deleteBtn = document.getElementById("delete-button");
+        const deleteForm = document.getElementById("delete-form");
+
+        deleteBtn.addEventListener("click", () => {
+            Swal.fire({
+                title: "Delete this color?",
+                text: "This action will delete the color from any palettes as well.",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#d33",
+                cancelButtonColor: "#3085d6",
+                confirmButtonText: "Yes, delete it",
+                cancelButtonText: "Cancel"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    deleteForm.submit();
+                }
+            });
+        });
+    });
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+
+        const createBtn = document.querySelector(".create-palette-icon");
+
+        createBtn.addEventListener("click", (event) => {
+            event.preventDefault();
+
+            Swal.fire({
+                title: "Create New Color",
+                html: `
+                    <input id="color-name" class="swal2-input" placeholder="Color Name">
+                    <input id="color-value" type="color" class="swal2-input" value="#ffffff">
+                `,
+                showCancelButton: true,
+                confirmButtonText: "Create",
+                preConfirm: (name) => {
+                    if (!name) {
+                        Swal.showValidationMessage("Palette name is required");
+                    }
+                    return name;
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    const form = document.createElement("form");
+                    form.method = "POST";
+                    form.action = "/create-color";
+
+                    const input = document.createElement("input");
+                    input.type = "hidden";
+                    input.name = "palette_name";
+                    input.value = result.value;
+
+                    form.appendChild(input);
+                    document.body.appendChild(form);
+                    form.submit();
+                }
+            });
+        });
+
+    });
+</script>
+
+{% endblock %}

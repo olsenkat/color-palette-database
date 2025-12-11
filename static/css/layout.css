@@ -105,6 +105,30 @@
     text-decoration: underline;
 }
 
+.color-options-panel {
+    background-color: #fff;
+    padding: 10px 15px;
+}
+
+.color-options-panel a,
+.color-options-panel button {
+    display: block;
+    margin: 5px 0;
+    font-weight: bold;
+    color: #f4567b;
+    text-decoration: none;
+    background: none !important;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    font-family: Nunito, sans-serif;;
+}
+
+.color-options-panel a:hover,
+.color-options-panel button:hover {
+    text-decoration: underline;
+}
+
 .hidden {
     display: none !important;
 }

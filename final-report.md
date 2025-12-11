@@ -1,7 +1,7 @@
 # 🎨 Final Report — Color Palette Database
 
 ## 📝 Project Summary
-The **Color Palette Database** is a full-stack SQL-powered web application that allows users to create, browse, edit, and delete custom color palettes. It demonstrates relational database design, CRUD operations, backend–frontend integration using Flask, and UI/UX considerations for visual color data. Users can log in, manage palettes, and view color blocks in a clean, responsive interface.
+The **Color Palette Database** is a SQL-powered web application that allows users to create, browse, edit, and delete custom color palettes. It demonstrates relational database design, CRUD operations, backend–frontend integration using Flask, and UI/UX considerations for visual color data. Users can log in, manage palettes, and view color blocks in a clean, responsive interface.
 
 ---
 
@@ -9,6 +9,19 @@ The **Color Palette Database** is a full-stack SQL-powered web application that 
 
 ### **System Diagram**
 ![ER Diagram](color-palette-db-schema.png)
+
+
+### 🧰 System Design - Technologies Used
+| Layer | Technology | Purpose |
+|--------|-------------|----------|
+| Database | **MySql** (or SQLite) | Main SQL database |
+| Backend | **Python (Flask)** | API + database connection |
+| Frontend | **HTML, CSS, JavaScript** | Display palettes and forms |
+| Version Control | **Git + GitHub** | Version tracking and public repo |
+| Optional WebHosting Platform | **Render** or **PythonAnywhere** | Hosting the webpage and Database |
+
+<img width="391" height="311" alt="palette_system_design drawio" src="https://github.com/user-attachments/assets/66be9b43-9725-4417-8020-d690e681d5e4" />
+
 
 
 ### **UI Sketches**
@@ -20,14 +33,11 @@ The **Color Palette Database** is a full-stack SQL-powered web application that 
 
   <img width="961" height="492" alt="palette_editpalette drawio" src="https://github.com/user-attachments/assets/86f8b765-26b4-4e6e-adab-627a2326a692" />
   
-
-
 ---
 
 ## ▶️ Demo
-(Insert GIF or link)
-
-
+![Demo Video](https://youtu.be/nFpsq9jgTgw)
+![DatabseQueryVideo](https://youtu.be/jhzR49yzK78)
 
 ---
 
@@ -61,7 +71,7 @@ No — the application itself does not use AI tools in production.
 AI was used as a **development partner**, helping with:
 - Debugging Flask routing issues.
 - Suggesting improved UI/UX approaches.
-- Writing or refining CSS for layout consistency.
+- Refining CSS for layout consistency.
 - Creating schema diagrams and explaining relational modeling.
 - Providing example SQL queries and validation logic.
 - Brainstorming UX ideas (icons, buttons, layout patterns).
@@ -98,9 +108,9 @@ I love design, color theory, and organization tools, so building a project cente
 
 ## ⚙️ Extra Notes on Performance / Architecture
 
-Even though this is a small project, the design prepares for scalability:
+Even though this is a small project, the design prepares for scalability (though this is still in progress):
 
-- **Normalized schema** prevents duplicate color data.
+- **Normalized schema** prevents duplicate color data (this still needs to be adjusted).
 - **Many-to-many pivot tables** allow efficient palette/tag/color relationships.
 - **Prepared statements & parameterized queries** (via Flask) protect against SQL injection.
 - **Modular route structure** improves readability and debugging.
@@ -115,4 +125,23 @@ Authentication uses simple username-based login for now, but could be extended t
 - and role-based permissions.
 
 ---
+
+
+## Future Work:
+
+### Near Future:
+I hope to work on the following:
+- Fixing the database so that palette names (at least palette_name and username) and color names are unique
+- Added a user_color table to the database so the user can see their own colors
+- Allowing the user to create, update, delete their own colors (but not other's colors)
+- Add functionality so the user can create tags and add them to palettes (and be able to query palettes by tags)
+
+### Items To Complete Afterwards
+- Update authentication to hash the passwords
+- Create a register screen instead of just login
+- Search palettes by color or tag
+- Generate palette from imported picture
+- Download palette (with hex values) for printing
+- (Stretch goal) find colors that are similar or colors that have been with a certain color on a palette
+- Implement this as a public web application using Render or PythonAnywhere
 

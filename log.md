@@ -20,4 +20,7 @@
 | 12/09/2025 | Classwork: Created the document for Final Project Collaboration and Reviews  | 0.5 |
 | 12/09/2025 | Classwork: Started Final Report, created powerpoint for presentation  | 1.25 |
 | 12/10/2025 | Added functionality for creating the palette and deleting the palette. Changed tags to display a list of user's tags.  | 1 |
-| **Total** |  | **27** |
+
+| 12/10/2025 | Worked on functionality for adding and deleting colors: realized that this would be a bit more complicated, because I will likely need a user_color table in the database, as the colors only show up if they are in the palette - but I don't want to give the user access to delete other people's colors. So this is commented out, but there are some working things there, but not fully. | 2 |
+| 12/10/2025 |  Worked on the final-report.md | 1 |
+| **Total** |  | **30** |
