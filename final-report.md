@@ -37,6 +37,7 @@ The **Color Palette Database** is a SQL-powered web application that allows user
 
 ## ▶️ Demo
 ![Demo Video](https://youtu.be/nFpsq9jgTgw)
+
 ![DatabseQueryVideo](https://youtu.be/jhzR49yzK78)
 
 ---
