@@ -137,7 +137,7 @@ I hope to work on the following:
 - Allowing the user to create, update, delete their own colors (but not other's colors)
 - Add functionality so the user can create tags and add them to palettes (and be able to query palettes by tags)
 
-### Items To Complete Afterwards
+### Items To Complete Afterwards:
 - Update authentication to hash the passwords
 - Create a register screen instead of just login
 - Search palettes by color or tag
